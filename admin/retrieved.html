@@ -14,8 +14,8 @@
   <header class="top">
     <a class="logo" href="dashboard.html">UniFound<small>(Administration)</small></a>
     <nav class="nav">
-      <a class="pill lf" href="dashboard.html">LOST &amp; FOUND</a>
-      <a class="pill rt on" href="retrieved.html">RETRIEVED</a>
+      <a class="pill lf" href="dashboard.html"><img class="icon" src="../assets/icons/nav-lost.svg" alt=""> LOST &amp; FOUND</a>
+      <a class="pill rt on" href="retrieved.html"><img class="icon" src="../assets/icons/nav-retrieved.svg" alt=""> RETRIEVED</a>
       <a class="pill out" href="login.html">Sign out</a>
     </nav>
   </header>
@@ -28,17 +28,27 @@
         <input type="search" placeholder="Search..." aria-label="Search items">
       </label>
       <select aria-label="Campus">
-        <option>Main Campus</option>
         <option>All Campuses</option>
+        <option selected>Main Campus</option>
+        <option>Arzadon Gym</option>
+        <option>Fame Building</option>
       </select>
       <select aria-label="Month">
         <option>All Month</option>
+        <option>January</option>
+        <option>February</option>
+        <option>March</option>
+        <option>April</option>
+        <option>May</option>
+        <option>June</option>
+        <option>July</option>
+        <option>August</option>
+        <option>September</option>
+        <option>October</option>
         <option>November</option>
+        <option>December</option>
       </select>
-      <select aria-label="Year">
-        <option>All Year</option>
-        <option>2026</option>
-      </select>
+      <input class="year" type="number" value="2026" min="2000" max="2100" step="1" placeholder="All Year" aria-label="Year">
     </div>
     <!-- Item cards -->
     <section class="grid">

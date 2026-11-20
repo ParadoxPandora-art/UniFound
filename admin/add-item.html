@@ -14,8 +14,8 @@
   <header class="top">
     <a class="logo" href="dashboard.html">UniFound<small>(Administration)</small></a>
     <nav class="nav">
-      <a class="pill lf" href="dashboard.html">LOST &amp; FOUND</a>
-      <a class="pill rt" href="retrieved.html">RETRIEVED</a>
+      <a class="pill lf" href="dashboard.html"><img class="icon" src="../assets/icons/nav-lost.svg" alt=""> LOST &amp; FOUND</a>
+      <a class="pill rt" href="retrieved.html"><img class="icon" src="../assets/icons/nav-retrieved.svg" alt=""> RETRIEVED</a>
       <a class="pill out" href="login.html">Sign out</a>
     </nav>
   </header>
@@ -24,10 +24,11 @@
   <form class="wrap" action="dashboard.html">
 
     <!-- Photos -->
-    <div>
+    <section class="box">
+      <h2>Photos</h2>
       <label class="drop" for="photos">
         <img class="icon" src="../assets/icons/upload.svg" alt="">
-        <b>Upload Photo</b>
+        Upload Photo
         <span class="chips"><span>JPG</span><span>PNG</span></span>
         <small>Maximum size: 10MB</small>
       </label>
@@ -39,40 +40,50 @@
         <div class="ph"></div>
         <span class="chips"><span>3/5</span></span>
       </div>
-    </div>
+    </section>
 
     <!-- Item details -->
-    <div>
-      <label for="name" style="margin-top: 0; font-size: 1.3rem">ITEM NAME:</label>
-      <input class="field" id="name" required>
+    <section class="box">
+      <h2>Item details</h2>
+      <div class="form-grid">
+        <div class="full">
+          <label for="name">Item Name:</label>
+          <input class="field" id="name" required>
+        </div>
 
-      <label for="desc">Item Description:</label>
-      <textarea class="field" id="desc" rows="6" required></textarea>
+        <div class="full">
+          <label for="desc">Item Description:</label>
+          <textarea class="field" id="desc" required></textarea>
+        </div>
 
-      <div class="row">
-        <label for="place">Place:</label>
-        <select class="field" id="place" style="width: auto">
-          <option>Main Campus</option>
-        </select>
+        <div>
+          <label for="place">Place:</label>
+          <select class="field" id="place">
+            <option>Main Campus</option>
+            <option>Arzadon Gym</option>
+            <option>Fame Building</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="area">Area:</label>
+          <input class="field" id="area" required>
+        </div>
+
+        <div>
+          <label for="date">Date Lost:</label>
+          <input class="field" id="date" type="date" required>
+        </div>
       </div>
 
-      <div class="row">
-        <label for="area">Area:</label>
-        <input class="field" id="area" style="width: 260px" required>
+      <div class="form-foot">
+        <p class="err"><img class="icon" src="../assets/icons/warning.svg" alt=""> Fill up required fields first!</p>
+        <div class="acts">
+          <button class="btn grey" type="reset">Reset</button>
+          <button class="btn blue" type="submit"><img class="icon" src="../assets/icons/lock-white.svg" alt=""> SAVE AND ADD</button>
+        </div>
       </div>
-
-      <div class="row">
-        <label for="date">Date Lost:</label>
-        <input class="field" id="date" type="date" style="width: auto" required>
-      </div>
-
-      <p class="err"><img class="icon" src="../assets/icons/warning.svg" alt=""> Fill up required fields first!</p>
-
-      <div class="acts" style="justify-content: flex-end; margin-top: 24px">
-        <button class="btn grey" type="reset">Reset</button>
-        <button class="btn blue" type="submit"><img class="icon" src="../assets/icons/lock-white.svg" alt=""> SAVE AND ADD</button>
-      </div>
-    </div>
+    </section>
   </form>
 
 </body>
