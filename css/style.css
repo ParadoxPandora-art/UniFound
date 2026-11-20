@@ -1,0 +1,652 @@
+/* ==========================================================================
+   UniFound – stylesheet
+   1. Tokens   2. Base   3. Header   4. Toolbar   5. Cards   6. Pagination
+   7. Popup    8. Buttons   9. Forms   10. Responsive & reduced motion
+   ========================================================================== */
+
+/* 1. Tokens ---------------------------------------------------------------- */
+:root {
+  --navy: #0f2a43;
+  --ink: #2a4560;
+  --teal: #2bb5a0;
+  --violet: #7c5cf0;
+  --coral: #ff5a5f;
+  --green: #2fbf71;
+  --line: #d9e5f2;
+  --radius: 22px;
+  --header-gradient: linear-gradient(110deg, #d6eafb 0%, #e8e2fb 55%, #d5f2ec 100%);
+}
+
+/* 2. Base ------------------------------------------------------------------ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  color: var(--navy);
+  background: linear-gradient(160deg, #eaf3fc, #f3effd 60%, #e9f8f4) fixed;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+.icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+
+/* 3. Header ---------------------------------------------------------------- */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--line);
+  background: var(--header-gradient);
+  background-size: 200% 100%;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  to { background-position: 100% 0; }
+}
+
+.logo {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.logo small {
+  margin-left: 6px;
+  font-size: 0.45em;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill {
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  font: 600 1rem inherit;
+  font-family: inherit;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.62;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.pill:hover,
+.pill.on {
+  opacity: 1;
+}
+
+.pill:active {
+  transform: scale(0.97);
+}
+
+.pill.lf  { background: var(--coral); }
+.pill.rt  { background: var(--green); }
+.pill.out {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid var(--line);
+  opacity: 1;
+}
+
+/* 4. Toolbar (search + filters) -------------------------------------------- */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 22px clamp(16px, 4vw, 48px) 6px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 240px;
+  max-width: 380px;
+  padding: 0 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.search:focus-within {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px #7c5cf025;
+}
+
+.search input {
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  background: none;
+}
+
+.bar select {
+  appearance: none;
+  padding: 12px 38px 12px 18px;
+  border: 0;
+  border-radius: 999px;
+  font: 500 0.95rem inherit;
+  font-family: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  background: #e6edf6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232a4560' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 14px center;
+}
+
+/* 5. Item cards ------------------------------------------------------------ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 24px;
+  padding: 20px clamp(16px, 4vw, 48px) 10px;
+}
+
+.card {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px #0f2a4310;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: rise 0.5s both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px #0f2a4318;
+}
+
+.card.done {
+  background: linear-gradient(160deg, #e4f8ec, #d4f3e2);
+  border-color: #b7e4c8;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.card-body h3 {
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.more {
+  margin-top: auto;
+  padding-top: 6px;
+  font-weight: 600;
+  color: #0a7d68;
+  text-decoration: underline;
+}
+
+/* Photo placeholder: sky, cloud and hills drawn in CSS. Replace with <img>. */
+.ph {
+  position: relative;
+  flex: none;
+  width: 132px;
+  min-height: 168px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse 70% 38% at 30% 82%, #8aa600 99%, #0000),
+    radial-gradient(ellipse 90% 30% at 80% 88%, #c6df83 99%, #0000),
+    radial-gradient(circle 22px at 38% 24%, #fff 98%, #0000),
+    linear-gradient(#bfe6fb, #f0faff);
+}
+
+/* 6. Pagination ------------------------------------------------------------ */
+.pager {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 16px 40px;
+}
+
+.pager button {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font: 600 0.95rem inherit;
+  font-family: inherit;
+  color: var(--ink);
+  background: #fff;
+  cursor: pointer;
+}
+
+.pager button.on {
+  color: #fff;
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.fab {
+  position: fixed;
+  right: clamp(16px, 4vw, 48px);
+  bottom: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(110deg, #2b6fe0, #7c5cf0);
+  box-shadow: 0 10px 24px #4a4ae055;
+  transition: transform 0.2s;
+}
+
+.fab:hover {
+  transform: translateY(-2px);
+}
+
+/* 7. Item popup (opens with :target, no JS) -------------------------------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow: auto;
+  background: #0f2a4366;
+  backdrop-filter: blur(4px);
+}
+
+.overlay:target {
+  display: flex;
+}
+
+.dialog {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 28px;
+  width: 100%;
+  max-width: 960px;
+  padding: 28px;
+  background: #fff;
+  border-radius: 28px;
+  animation: pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.dialog.done {
+  background: linear-gradient(160deg, #eefcf3, #e1f6ea);
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+}
+
+.close {
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+/* photo viewer */
+.gallery {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 8px 8px 0 #8aa60055;
+}
+
+.gallery .ph {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.gallery .count {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: #fff;
+  background: #2a4560cc;
+}
+
+.gallery .view {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  translate: -50% 0;
+  padding: 12px 26px;
+  border: 0;
+  border-radius: 999px;
+  font: 600 1rem inherit;
+  font-family: inherit;
+  color: var(--navy);
+  background: #cfe0ff;
+  cursor: pointer;
+}
+
+/* details column */
+.info h2 {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  border-bottom: 3px solid var(--navy);
+}
+
+.info h2 span {
+  font-size: 0.9rem;
+}
+
+.desc {
+  margin: 6px 0 14px;
+  padding: 14px 16px;
+  line-height: 1.5;
+  background: #fff;
+  border: 2px solid var(--navy);
+  border-radius: 16px;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+  margin-bottom: 14px;
+}
+
+.bad { color: #e03131; font-weight: 600; }
+.ok  { color: #0a7d3a; font-weight: 600; }
+
+.claim {
+  padding-top: 14px;
+  border-top: 3px solid var(--navy);
+}
+
+.claim p {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.contact a,
+.contact span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact a {
+  text-decoration: underline;
+}
+
+/* 8. Buttons --------------------------------------------------------------- */
+.acts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border: 0;
+  border-radius: 999px;
+  font: 600 1rem inherit;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn.grey   { background: #cfd8e3; color: var(--navy); }
+.btn.yellow { background: #ffd93d; color: var(--navy); }
+.btn.blue   { background: linear-gradient(110deg, #4b8bf5, #7c5cf0); color: #fff; }
+
+/* Claim stays disabled until a file is chosen in #file (pure CSS). */
+.claimbox .yellow[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.claimbox:has(#file:valid) .yellow {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.round.edit { background: #cfe0ff; }
+.round.del  { background: #ee3b30; }
+
+/* 9. Login + Add Item form ------------------------------------------------- */
+.panel {
+  max-width: 640px;
+  margin: 56px auto;
+  padding: 32px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 10px 30px #0f2a4312;
+  animation: pop 0.35s both;
+}
+
+.panel h1 {
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin: 14px 0 6px;
+  font-weight: 700;
+}
+
+.field {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  font: inherit;
+  background: #e3eeff;
+}
+
+.field:focus {
+  outline: 0;
+  background: #fff;
+  border-color: var(--violet);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 1.4fr;
+  gap: 32px;
+  padding: 32px clamp(16px, 4vw, 48px);
+}
+
+.drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 320px;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  color: var(--ink);
+  background: #fff;
+  border: 2px dashed #9db6d6;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.drop:hover {
+  background: #eef4ff;
+  border-color: var(--violet);
+}
+
+.drop .icon {
+  width: 72px;
+  height: 72px;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+}
+
+.chips span {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: #dde5ef;
+}
+
+.thumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.thumbs .ph {
+  width: 70px;
+  min-height: 84px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.row label {
+  margin: 14px 0 6px;
+}
+
+/* Validation message shows while any required field is still empty. */
+.err {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-top: 16px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #a61e22;
+  background: #ffd5d6;
+}
+
+.wrap:has(:invalid) .err {
+  display: flex;
+}
+
+/* 10. Responsive + reduced motion ----------------------------------------- */
+@media (max-width: 760px) {
+  .dialog { grid-template-columns: 1fr; padding: 20px; }
+  .gallery { min-height: 260px; }
+  .wrap { grid-template-columns: 1fr; }
+  .meta,
+  .contact { grid-template-columns: 1fr; }
+  .close { top: -12px; right: 0; }
+  .fab { bottom: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

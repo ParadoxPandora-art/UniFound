@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UniFound – Retrieved</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="top">
+    <a class="logo" href="index.html">UniFound</a>
+    <nav class="nav">
+      <a class="pill lf" href="index.html">LOST &amp; FOUND</a>
+      <a class="pill rt on" href="retrieved.html">RETRIEVED</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Search and filters -->
+    <div class="bar">
+      <label class="search">
+        <img class="icon" src="assets/icons/search.svg" alt="">
+        <input type="search" placeholder="Search..." aria-label="Search items">
+      </label>
+      <select aria-label="Campus">
+        <option>Main Campus</option>
+        <option>All Campuses</option>
+      </select>
+      <select aria-label="Month">
+        <option>All Month</option>
+        <option>November</option>
+      </select>
+      <select aria-label="Year">
+        <option>All Year</option>
+        <option>2026</option>
+      </select>
+    </div>
+    <!-- Item cards -->
+    <section class="grid">
+      <article class="card done" style="--i: 1">
+        <div class="ph"></div>
+        <div class="card-body">
+          <h3>Item name</h3>
+          <span>Place: Main Campus</span>
+          <span>Area: L301</span>
+          <span>Date Lost: 11/01/2026</span>
+          <span>Date Found: 11/07/2026</span>
+          <a class="more" href="#details">View Full Details &rarr;</a>
+        </div>
+      </article>
+      <article class="card done" style="--i: 2">
+        <div class="ph"></div>
+        <div class="card-body">
+          <h3>Item name</h3>
+          <span>Place: Main Campus</span>
+          <span>Area: L301</span>
+          <span>Date Lost: 11/01/2026</span>
+          <span>Date Found: 11/07/2026</span>
+          <a class="more" href="#details">View Full Details &rarr;</a>
+        </div>
+      </article>
+      <article class="card done" style="--i: 3">
+        <div class="ph"></div>
+        <div class="card-body">
+          <h3>Item name</h3>
+          <span>Place: Main Campus</span>
+          <span>Area: L301</span>
+          <span>Date Lost: 11/01/2026</span>
+          <span>Date Found: 11/07/2026</span>
+          <a class="more" href="#details">View Full Details &rarr;</a>
+        </div>
+      </article>
+    </section>
+    <!-- Pagination -->
+    <nav class="pager" aria-label="Pages">
+      <button type="button">Previous</button>
+      <button type="button" class="on">1</button>
+      <button type="button">2</button>
+      <button type="button">3</button>
+      <button type="button">Next</button>
+    </nav>
+  </main>
+
+  <!-- ===== Item popup (opened by the #details link on each card) ===== -->
+  <div id="details" class="overlay">
+    <div class="dialog done" role="dialog" aria-modal="true" aria-labelledby="item-title">
+      <a class="close" href="#" aria-label="Close"><img class="icon" src="assets/icons/close.svg" alt=""></a>
+
+      <!-- Photo viewer -->
+      <div class="gallery">
+        <span class="count">3/5</span>
+        <div class="ph"></div>
+        <button class="view" type="button">VIEW IMAGE</button>
+      </div>
+
+      <!-- Details -->
+      <div class="info">
+        <h2 id="item-title">Phone with black case <span>ID#6767</span></h2>
+        <b>Item Description:</b>
+        <p class="desc">Black phone with black case, with a sanrio kuromi sticker at the back of the case</p>
+        <div class="meta">
+          <span><b>Place:</b> Main Campus</span>
+          <span><b>Status:</b> <span class="ok">Retrieved</span></span>
+          <span><b>Area:</b> L304</span>
+          <span></span>
+          <span><b>Date Lost:</b> 11/01/2026</span>
+      <span><b>Date Found:</b> 11/07/2026</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

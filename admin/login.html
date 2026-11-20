@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UniFound – Admin Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="top">
+    <a class="logo" href="../index.html">UniFound</a>
+    <nav class="nav">
+      <a class="pill lf" href="../index.html">LOST &amp; FOUND</a>
+      <a class="pill rt" href="../retrieved.html">RETRIEVED</a>
+    </nav>
+  </header>
+
+  <!-- ===== Admin login ===== -->
+  <main class="panel">
+    <h1>ADMIN LOGIN</h1>
+    <form action="dashboard.html">
+      <label for="user">Username or Email:</label>
+      <input class="field" id="user" type="text" autocomplete="username" required>
+
+      <label for="pass">Password:</label>
+      <input class="field" id="pass" type="password" autocomplete="current-password" required>
+
+      <div class="center">
+        <button class="btn blue" type="submit">Log In</button>
+      </div>
+    </form>
+  </main>
+
+</body>
+</html>
