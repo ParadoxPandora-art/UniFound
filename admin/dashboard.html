@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>UniFound Admin</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>UniFound Admin – Lost &amp; Found</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body data-page="admin-dashboard">
 
   <!-- ===== Header ===== -->
   <header class="top">
@@ -25,16 +26,16 @@
     <div class="bar">
       <label class="search">
         <img class="icon" src="../assets/icons/search.svg" alt="">
-        <input type="search" placeholder="Search..." aria-label="Search items">
+        <input type="search" placeholder="Search..." aria-label="Search items" autocomplete="off">
       </label>
-      <select aria-label="Campus">
-        <option>All Campuses</option>
-        <option selected>Main Campus</option>
+      <select aria-label="Campus" autocomplete="off">
+        <option selected>All Campuses</option>
+        <option>Main Campus</option>
         <option>Arzadon Gym</option>
         <option>Fame Building</option>
       </select>
-      <select aria-label="Month">
-        <option>All Month</option>
+      <select aria-label="Month" autocomplete="off">
+        <option selected>All Month</option>
         <option>January</option>
         <option>February</option>
         <option>March</option>
@@ -48,125 +49,36 @@
         <option>November</option>
         <option>December</option>
       </select>
-      <input class="year" type="number" value="2026" min="2000" max="2100" step="1" placeholder="All Year" aria-label="Year">
+      <input class="year" type="number" min="2000" max="2100" step="1" placeholder="All Year" aria-label="Year" autocomplete="off">
     </div>
-    <!-- Item cards -->
-    <section class="grid">
-      <article class="card" style="--i: 1">
-        <div class="ph"></div>
-        <div class="card-body">
-          <h3>Item name</h3>
-          <span>Place: Main Campus</span>
-          <span>Area: L301</span>
-          <span>Date: 11/01/2026</span>
-          <a class="more" href="#details">View Full Details &rarr;</a>
-        </div>
-      </article>
-      <article class="card" style="--i: 2">
-        <div class="ph"></div>
-        <div class="card-body">
-          <h3>Item name</h3>
-          <span>Place: Main Campus</span>
-          <span>Area: L301</span>
-          <span>Date: 11/01/2026</span>
-          <a class="more" href="#details">View Full Details &rarr;</a>
-        </div>
-      </article>
-      <article class="card" style="--i: 3">
-        <div class="ph"></div>
-        <div class="card-body">
-          <h3>Item name</h3>
-          <span>Place: Main Campus</span>
-          <span>Area: L301</span>
-          <span>Date: 11/01/2026</span>
-          <a class="more" href="#details">View Full Details &rarr;</a>
-        </div>
-      </article>
-      <article class="card" style="--i: 4">
-        <div class="ph"></div>
-        <div class="card-body">
-          <h3>Item name</h3>
-          <span>Place: Main Campus</span>
-          <span>Area: L301</span>
-          <span>Date: 11/01/2026</span>
-          <a class="more" href="#details">View Full Details &rarr;</a>
-        </div>
-      </article>
-      <article class="card" style="--i: 5">
-        <div class="ph"></div>
-        <div class="card-body">
-          <h3>Item name</h3>
-          <span>Place: Main Campus</span>
-          <span>Area: L301</span>
-          <span>Date: 11/01/2026</span>
-          <a class="more" href="#details">View Full Details &rarr;</a>
-        </div>
-      </article>
-      <article class="card" style="--i: 6">
-        <div class="ph"></div>
-        <div class="card-body">
-          <h3>Item name</h3>
-          <span>Place: Main Campus</span>
-          <span>Area: L301</span>
-          <span>Date: 11/01/2026</span>
-          <a class="more" href="#details">View Full Details &rarr;</a>
-        </div>
-      </article>
-    </section>
+
+    <!-- Item cards — rendered by admin.js -->
+    <section class="grid"></section>
+
     <!-- Pagination -->
-    <nav class="pager" aria-label="Pages">
-      <button type="button">Previous</button>
-      <button type="button" class="on">1</button>
-      <button type="button">2</button>
-      <button type="button">3</button>
-      <button type="button">Next</button>
-    </nav>
+    <nav class="pager" aria-label="Pages"></nav>
 
     <!-- Add item shortcut -->
     <a class="fab" href="add-item.html">ADD LOST ITEM <img class="icon" src="../assets/icons/plus-white.svg" alt=""></a>
   </main>
 
-  <!-- ===== Item popup (opened by the #details link on each card) ===== -->
+  <!-- ===== Item popup — populated by admin.js ===== -->
   <div id="details" class="overlay">
     <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="item-title">
       <a class="close" href="#" aria-label="Close"><img class="icon" src="../assets/icons/close.svg" alt=""></a>
 
-      <!-- Photo viewer -->
+      <!-- Photo viewer — populated by admin.js -->
       <div class="gallery">
-        <span class="count">3/5</span>
+        <span class="count"></span>
         <div class="ph"></div>
-        <button class="view" type="button">VIEW IMAGE</button>
+        <button class="view" type="button" style="display:none">VIEW IMAGE</button>
       </div>
 
-      <!-- Details -->
-      <div class="info">
-        <h2 id="item-title">Phone with black case <span>ID#6767</span></h2>
-        <b>Item Description:</b>
-        <p class="desc">Black phone with black case, with a sanrio kuromi sticker at the back of the case</p>
-        <div class="meta">
-          <span><b>Place:</b> Main Campus</span>
-          <span><b>Status:</b> <span class="bad">UNCLAIMED</span></span>
-          <span><b>Area:</b> L304</span>
-          <span></span>
-          <span><b>Date Lost:</b> 11/01/2026</span>
-        </div>
-        <!-- Admin: Claim unlocks once the retrieval form is attached -->
-        <div class="claim claimbox">
-          <p>Attach the “Retrieved item” document form first before claiming</p>
-          <div class="acts">
-            <label class="btn grey" style="margin: 0">
-              <img class="icon" src="../assets/icons/file.svg" alt=""> Upload File <img class="icon" src="../assets/icons/plus.svg" alt="">
-              <input id="file" type="file" required hidden>
-            </label>
-            <a class="btn yellow" href="retrieved.html" aria-disabled="true"><img class="icon" src="../assets/icons/lock.svg" alt=""> Claim</a>
-            <span class="spacer"></span>
-            <button class="round edit" type="button" aria-label="Edit item"><img class="icon" src="../assets/icons/edit.svg" alt=""></button>
-            <button class="round del" type="button" aria-label="Delete item"><img class="icon" src="../assets/icons/trash.svg" alt=""></button>
-          </div>
-        </div>
-      </div>
+      <!-- Details — populated by admin.js -->
+      <div class="info"></div>
     </div>
   </div>
 
+  <script src="../js/admin.js?v=20261122j"></script>
 </body>
 </html>

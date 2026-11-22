@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>UniFound Admin – Add Item</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body data-page="admin-add">
 
   <!-- ===== Header ===== -->
   <header class="top">
@@ -21,24 +22,22 @@
   </header>
 
   <!-- ===== Add item form ===== -->
-  <form class="wrap" action="dashboard.html">
+  <form id="item-form" class="wrap" autocomplete="off">
 
     <!-- Photos -->
     <section class="box">
       <h2>Photos</h2>
-      <label class="drop" for="photos">
+      <label class="drop" id="drop-area" for="photos">
         <img class="icon" src="../assets/icons/upload.svg" alt="">
         Upload Photo
         <span class="chips"><span>JPG</span><span>PNG</span></span>
         <small>Maximum size: 10MB</small>
       </label>
-      <input id="photos" type="file" accept="image/jpeg,image/png" multiple hidden>
+      <input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
 
+      <!-- Thumbnails start empty; populated by admin.js when images are added -->
       <div class="thumbs">
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <span class="chips"><span>3/5</span></span>
+        <span class="chips"><span>0/5</span></span>
       </div>
     </section>
 
@@ -47,13 +46,13 @@
       <h2>Item details</h2>
       <div class="form-grid">
         <div class="full">
-          <label for="name">Item Name:</label>
-          <input class="field" id="name" required>
+          <label for="name">Item Name: <span style="color:#dc2626">*</span></label>
+          <input class="field" id="name" required placeholder="e.g. Blue Umbrella">
         </div>
 
         <div class="full">
           <label for="desc">Item Description:</label>
-          <textarea class="field" id="desc" required></textarea>
+          <textarea class="field" id="desc" placeholder="Describe distinguishing features, color, brand, stickers..."></textarea>
         </div>
 
         <div>
@@ -67,24 +66,25 @@
 
         <div>
           <label for="area">Area:</label>
-          <input class="field" id="area" required>
+          <input class="field" id="area" placeholder="e.g. Room 302, Library, Gym">
         </div>
 
         <div>
           <label for="date">Date Lost:</label>
-          <input class="field" id="date" type="date" required>
+          <input class="field" id="date" type="date">
         </div>
       </div>
 
       <div class="form-foot">
-        <p class="err"><img class="icon" src="../assets/icons/warning.svg" alt=""> Fill up required fields first!</p>
+        <p class="err" style="display:none"><img class="icon" src="../assets/icons/warning.svg" alt=""> Please enter the required item name!</p>
         <div class="acts">
           <button class="btn grey" type="reset">Reset</button>
-          <button class="btn blue" type="submit"><img class="icon" src="../assets/icons/lock-white.svg" alt=""> SAVE AND ADD</button>
+          <button class="btn blue" type="submit" id="save-btn"><img class="icon" src="../assets/icons/lock-white.svg" alt=""> SAVE AND ADD</button>
         </div>
       </div>
     </section>
   </form>
 
+  <script src="../js/admin.js?v=20261122j"></script>
 </body>
 </html>

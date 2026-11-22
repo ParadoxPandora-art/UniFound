@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sync Test</title>
+</head>
+<body>
+<script>
+'use strict';
+
+const STORAGE_KEY = 'unifound_items';
+
+function unpack(raw) {
+  if (!raw) return null;
+  try {
+    const value = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    if (Array.isArray(value)) return { version: 0, items: value };
+    if (value && Array.isArray(value.items)) {
+      return { version: Number(value.version) || 0, items: value.items };
+    }
+  } catch (e) {}
+  return null;
+}
+
+function read() {
+  try { return unpack(localStorage.getItem(STORAGE_KEY)); } catch (e) { return null; }
+}
+
+function post(type, data) {
+  try { window.parent.postMessage({ type, data }, '*'); } catch (e) {}
+}
+
+function sendData() {
+  try { post('UNIFOUND_PULL_RESPONSE', localStorage.getItem(STORAGE_KEY)); }
+  catch (e) { post('UNIFOUND_PULL_RESPONSE', null); }
+}
+
+function receiveParentData(raw) {
+  const incoming = unpack(raw);
+  if (!incoming) return;
+
+  const current = read();
+  if (!current || incoming.version >= current.version) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(incoming));
+      try {
+        const bc = new BroadcastChannel('unifound_bus');
+        bc.postMessage({ type: 'UNIFOUND_DATA_CHANGED', version: incoming.version });
+        bc.close();
+      } catch (e) {}
+    } catch (e) {}
+  }
+  sendData();
+}
+
+window.addEventListener('message', function(e) {
+  const message = e.data || {};
+  if (message.type === 'UNIFOUND_SYNC_INIT' || message.type === 'UNIFOUND_SYNC_SAVE') {
+    receiveParentData(message.data);
+    if (message.type === 'UNIFOUND_SYNC_SAVE') {
+      post('UNIFOUND_SYNC_SAVED', message.data && unpack(message.data)?.version);
+    }
+  } else if (message.type === 'UNIFOUND_PULL_REQUEST') {
+    sendData();
+  }
+});
+
+window.addEventListener('storage', function(e) {
+  if (e.key === STORAGE_KEY) sendData();
+});
+
+try {
+  const bc = new BroadcastChannel('unifound_bus');
+  bc.onmessage = function(e) {
+    if (e.data && e.data.type === 'UNIFOUND_DATA_CHANGED') sendData();
+  };
+} catch (e) {}
+
+post('UNIFOUND_SYNC_READY');
+sendData();
+</script>
+</body>
+</html>

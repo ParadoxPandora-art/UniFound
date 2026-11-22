@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>UniFound – Admin Login</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body data-page="admin-login">
 
   <!-- ===== Header ===== -->
   <header class="top">
@@ -22,18 +23,21 @@
   <!-- ===== Admin login ===== -->
   <main class="panel">
     <h1>ADMIN LOGIN</h1>
-    <form action="dashboard.html">
+    <form autocomplete="off">
       <label for="user">Username or Email:</label>
-      <input class="field" id="user" type="text" autocomplete="username" required>
+      <input class="field" id="user" type="text" autocomplete="username" required placeholder="admin">
 
       <label for="pass">Password:</label>
-      <input class="field" id="pass" type="password" autocomplete="current-password" required>
+      <input class="field" id="pass" type="password" autocomplete="current-password" required placeholder="••••••••">
 
-      <div class="center">
-        <button class="btn blue" type="submit">Log In</button>
+      <p id="login-error" class="err" style="display:none;margin-top:14px;text-align:center;color:#dc2626;font-weight:600;font-size:0.92rem;"></p>
+
+      <div class="center" style="margin-top:16px">
+        <button class="btn blue" type="submit" id="login-btn">Log In</button>
       </div>
     </form>
   </main>
 
+  <script src="../js/admin.js?v=20261122j"></script>
 </body>
 </html>
