@@ -1,90 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>UniFound Admin – Add Item</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../css/style.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<title>UniFound Admin – Add Item</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+	<link rel="stylesheet" href="../css/style.css">
 </head>
 <body data-page="admin-add">
+	<header class="top">
+		<a class="logo" href="dashboard.html"><img class="logo-image" src="../assets/unifound.png" alt="">UniFound<small>(Administration)</small></a>
+		<nav class="nav">
+			<a class="pill lf" href="dashboard.html"><img class="icon" src="../assets/icons/nav-lost.svg" alt=""> LOST &amp; FOUND</a>
+			<a class="pill rt" href="retrieved.html"><img class="icon" src="../assets/icons/nav-retrieved.svg" alt=""> RETRIEVED</a>
+			<a class="pill out" href="login.html">Sign out</a>
+		</nav>
+	</header>
 
-  <!-- ===== Header ===== -->
-  <header class="top">
-    <a class="logo" href="dashboard.html">UniFound<small>(Administration)</small></a>
-    <nav class="nav">
-      <a class="pill lf" href="dashboard.html"><img class="icon" src="../assets/icons/nav-lost.svg" alt=""> LOST &amp; FOUND</a>
-      <a class="pill rt" href="retrieved.html"><img class="icon" src="../assets/icons/nav-retrieved.svg" alt=""> RETRIEVED</a>
-      <a class="pill out" href="login.html">Sign out</a>
-    </nav>
-  </header>
+	<form id="item-form" class="wrap" autocomplete="off">
+		<section class="box">
+			<h2>Photos</h2>
+			<label class="drop" id="drop-area" for="photos">
+				<img class="icon" src="../assets/icons/upload.svg" alt="">
+				Upload Photo
+				<span class="chips"><span>JPG</span><span>PNG</span></span>
+				<small>Maximum size: 10MB</small>
+			</label>
+			<input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
 
-  <!-- ===== Add item form ===== -->
-  <form id="item-form" class="wrap" autocomplete="off">
+			<div class="thumbs">
+				<span class="chips"><span>0/5</span></span>
+			</div>
+		</section>
 
-    <!-- Photos -->
-    <section class="box">
-      <h2>Photos</h2>
-      <label class="drop" id="drop-area" for="photos">
-        <img class="icon" src="../assets/icons/upload.svg" alt="">
-        Upload Photo
-        <span class="chips"><span>JPG</span><span>PNG</span></span>
-        <small>Maximum size: 10MB</small>
-      </label>
-      <input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+		<section class="box">
+			<h2>Item details</h2>
+			<div class="form-grid">
+				<div class="full">
+					<label for="name">Item Name: <span style="color:#dc2626">*</span></label>
+					<input class="field" id="name" required placeholder="e.g. Blue Umbrella">
+				</div>
 
-      <!-- Thumbnails start empty; populated by admin.js when images are added -->
-      <div class="thumbs">
-        <span class="chips"><span>0/5</span></span>
-      </div>
-    </section>
+				<div class="full">
+					<label for="desc">Item Description:</label>
+					<textarea class="field" id="desc" placeholder="Describe distinguishing features, color, brand, stickers..."></textarea>
+				</div>
 
-    <!-- Item details -->
-    <section class="box">
-      <h2>Item details</h2>
-      <div class="form-grid">
-        <div class="full">
-          <label for="name">Item Name: <span style="color:#dc2626">*</span></label>
-          <input class="field" id="name" required placeholder="e.g. Blue Umbrella">
-        </div>
+				<div>
+					<label for="place">Place:</label>
+					<select class="field" id="place">
+						<option>Main Campus</option>
+						<option>Arzadon Gym</option>
+						<option>Fame Building</option>
+					</select>
+				</div>
 
-        <div class="full">
-          <label for="desc">Item Description:</label>
-          <textarea class="field" id="desc" placeholder="Describe distinguishing features, color, brand, stickers..."></textarea>
-        </div>
+				<div>
+					<label for="area">Area:</label>
+					<input class="field" id="area" placeholder="e.g. Room 302, Library, Gym">
+				</div>
 
-        <div>
-          <label for="place">Place:</label>
-          <select class="field" id="place">
-            <option>Main Campus</option>
-            <option>Arzadon Gym</option>
-            <option>Fame Building</option>
-          </select>
-        </div>
+				<div>
+					<label for="date">Date Lost:</label>
+					<input class="field" id="date" type="date">
+				</div>
+			</div>
 
-        <div>
-          <label for="area">Area:</label>
-          <input class="field" id="area" placeholder="e.g. Room 302, Library, Gym">
-        </div>
+			<div class="form-foot">
+				<p class="err" style="display:none"><img class="icon" src="../assets/icons/warning.svg" alt=""> Please enter the required item name!</p>
+				<div class="acts">
+					<button class="btn grey" type="reset">Reset</button>
+					<button class="btn blue" type="submit" id="save-btn"><img class="icon" src="../assets/icons/lock-white.svg" alt=""> SAVE AND ADD</button>
+				</div>
+			</div>
+		</section>
+	</form>
 
-        <div>
-          <label for="date">Date Lost:</label>
-          <input class="field" id="date" type="date">
-        </div>
-      </div>
-
-      <div class="form-foot">
-        <p class="err" style="display:none"><img class="icon" src="../assets/icons/warning.svg" alt=""> Please enter the required item name!</p>
-        <div class="acts">
-          <button class="btn grey" type="reset">Reset</button>
-          <button class="btn blue" type="submit" id="save-btn"><img class="icon" src="../assets/icons/lock-white.svg" alt=""> SAVE AND ADD</button>
-        </div>
-      </div>
-    </section>
-  </form>
-
-  <script src="../js/admin.js?v=20261122j"></script>
+	<script src="../js/admin.js?v=20261122j"></script>
 </body>
 </html>
