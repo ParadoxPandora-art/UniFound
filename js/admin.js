@@ -628,30 +628,6 @@ function markRetrieved(id, details) {
 	showToast('Item marked as retrieved!');
 }
 
-function deleteItem(id) {
-	const box = popup('confirm-overlay', `
-		<div class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text">
-			<h2 id="confirm-title">Delete this item?</h2>
-			<p id="confirm-text">Are you sure you want to delete this item record? This cannot be undone.</p>
-			<div class="confirm-actions">
-				<button class="btn grey" type="button" data-act="cancel">Cancel</button>
-				<button class="btn danger" type="button" data-act="confirm">Delete</button>
-			</div>
-		</div>`, (e, close) => {
-		const act = e.target.dataset.act;
-		if (e.target === box || act === 'cancel') {
-			close();
-		} else if (act === 'confirm') {
-			close();
-			saveItems(getItems().filter(i => String(i.id) !== String(id)));
-			els.overlay?.classList.remove('open');
-			loadData();
-			showToast('Item deleted.');
-		}
-	});
-	box.querySelector('[data-act="cancel"]').focus();
-}
-
 function editItem(id) {
 	const item = getItem(id);
 	if (!item || item.status === 'retrieved') return;
