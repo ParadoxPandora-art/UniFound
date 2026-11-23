@@ -162,11 +162,13 @@ function applyFilters() {
 	let result = allItems.slice();
 
 	if (keyword) {
+		const idQuery = keyword.match(/^(?:id)?\s*#\s*(.+)$/i)?.[1] || '';
 		result = result.filter(item =>
 			(item.name || '').toLowerCase().includes(keyword) ||
 			(item.area || '').toLowerCase().includes(keyword) ||
 			(item.campus || '').toLowerCase().includes(keyword) ||
-			(item.description || '').toLowerCase().includes(keyword)
+			(item.description || '').toLowerCase().includes(keyword) ||
+			(idQuery && shortId(item.id).toLowerCase().includes(idQuery))
 		);
 	}
 

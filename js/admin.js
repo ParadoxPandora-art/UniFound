@@ -535,6 +535,12 @@ function searchItem() {
 	currentPage = 1;
 	loadData();
 }
+
+function publicItemId(id) {
+	if (!id) return '';
+	return String(id).replace('UF-', '').slice(-4);
+}
+
 function campusFilter() {
 	currentPage = 1;
 	loadData();
@@ -573,12 +579,14 @@ function loadData() {
 	}
 
 	const q = (searchInput?.value || '').toLowerCase().trim();
+	const idQuery = q.match(/^(?:id)?\s*#\s*(.+)$/i)?.[1] || '';
 	if (q) {
 		items = items.filter(i =>
 			(i.name || '').toLowerCase().includes(q) ||
 			(i.area || '').toLowerCase().includes(q) ||
 			(i.campus || '').toLowerCase().includes(q) ||
-			(i.description || '').toLowerCase().includes(q)
+			(i.description || '').toLowerCase().includes(q) ||
+			(idQuery && publicItemId(i.id).toLowerCase().includes(idQuery))
 		);
 	}
 
@@ -769,13 +777,13 @@ function viewItem(id) {
 						</div>
 						<div>
 							<label for="ret-contact" style="font-size:.85rem;font-weight:600">Retriever Contact <span style="color:#ef4444">*</span></label>
-							<input id="ret-contact" class="field" type="text" placeholder="Phone or email" required style="width:100%;margin-top:4px">
+							<input id="ret-contact" class="field" type="text" placeholder="Phone (11–16 characters) or email" required style="width:100%;margin-top:4px">
 						</div>
 						<div>
 							<label for="ret-note" style="font-size:.85rem;font-weight:600">Notes <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
 							<textarea id="ret-note" class="field" rows="2" placeholder="ID presented, claim details..." style="width:100%;margin-top:4px"></textarea>
 						</div>
-						<div id="retriever-err" style="color:#dc2626;font-size:.85rem;display:none;font-weight:500">Please provide both name and contact information.</div>
+						<div id="retriever-err" style="color:#dc2626;font-size:.85rem;display:none;font-weight:500"></div>
 						<div class="acts" style="margin-top:8px;display:flex;align-items:center;gap:10px">
 							<button class="btn yellow" type="submit" style="display:inline-flex;align-items:center;gap:6px">Mark as Retrieved</button>
 							<span class="spacer" style="flex:1"></span>
@@ -795,14 +803,14 @@ function viewItem(id) {
 					</div>
 					<div class="acts" style="margin-top:12px;display:flex;align-items:center;gap:8px">
 						<span class="spacer" style="flex:1"></span>
-						<button class="round edit" type="button" aria-label="Edit item" data-id="${esc(id)}"><img class="icon" src="../assets/icons/edit.svg" alt=""></button>
+						${item.status !== 'retrieved' ? `<button class="round edit" type="button" aria-label="Edit item" data-id="${esc(id)}"><img class="icon" src="../assets/icons/edit.svg" alt=""></button>` : ''}
 						<button class="round del"	type="button" aria-label="Delete item" data-id="${esc(id)}"><img class="icon" src="../assets/icons/trash.svg" alt=""></button>
 					</div>
 				</div>`;
 		}
 
 		info.innerHTML = `
-			<h2 id="item-title">${esc(item.name)} <span>${esc(item.id)}</span></h2>
+			<h2 id="item-title">${esc(item.name)} <span>${publicItemId(item.id) ? 'ID#' + esc(publicItemId(item.id)) : ''}</span></h2>
 			<b>Item Description:</b>
 			<p class="desc">${esc(item.description)}</p>
 			<div class="meta">
@@ -825,8 +833,13 @@ function viewItem(id) {
 				const note		= retForm.querySelector('#ret-note').value.trim();
 				const errEl	 = retForm.querySelector('#retriever-err');
 
-				if (!name || !contact) {
-					if (errEl) errEl.style.display = 'block';
+				if (!name || !isValidRetrieverContact(contact)) {
+					if (errEl) {
+						errEl.textContent = !name
+							? 'Please provide the retriever name.'
+							: 'Enter a valid email or a phone with 11–16 characters (digits, spaces, plus, or hyphen).';
+						errEl.style.display = 'block';
+					}
 					return;
 				}
 				if (errEl) errEl.style.display = 'none';
@@ -844,6 +857,15 @@ function viewItem(id) {
 	}
 
 	overlay.classList.add('open');
+}
+
+function isValidRetrieverContact(value) {
+	const contact = String(value || '').trim();
+	const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+	const isPhone = contact.length >= 11 && contact.length <= 16
+		&& /^[0-9 +\-]+$/.test(contact)
+		&& /\d/.test(contact);
+	return isEmail || isPhone;
 }
 
 function markRetrieved(id, details) {
@@ -874,6 +896,10 @@ function deleteItem(id) {
 }
 
 function editItem(id) {
+	const item = getItem(id);
+	if (!item || item.status === 'retrieved') {
+		return;
+	}
 	window.location.href = `add-item.html?edit=${encodeURIComponent(id)}`;
 }
 
@@ -1087,6 +1113,10 @@ function initAdminAddPage() {
 	const urlParams	 = new URLSearchParams(window.location.search);
 	const editId			= urlParams.get('edit');
 	const editItemObj = editId ? getItem(editId) : null;
+	if (editItemObj?.status === 'retrieved') {
+		window.location.replace('retrieved.html');
+		return;
+	}
 
 	if (editItemObj) {
 		document.title = 'UniFound Admin – Edit Item';
@@ -1167,6 +1197,13 @@ function initAdminAddPage() {
 			if (errP) errP.style.display = 'block';
 			return false;
 		}
+		const descVal = (descF?.value || '').trim();
+		if (!descVal) {
+			validateItemField(descF);
+			descF?.focus();
+			if (errP) errP.style.display = 'block';
+			return false;
+		}
 		if (errP) errP.style.display = 'none';
 
 		isSubmitting = true;
@@ -1187,8 +1224,12 @@ function initAdminAddPage() {
 			if (editId && editItemObj) {
 				const idx = items.findIndex(i => String(i.id) === String(editId));
 				if (idx !== -1) {
+					if (items[idx].status === 'retrieved') {
+						window.location.href = 'retrieved.html';
+						return false;
+					}
 					items[idx].name			= nameVal;
-					items[idx].description	= (descF?.value || '').trim() || 'No description provided.';
+					items[idx].description	= descVal;
 					items[idx].campus		= placeF?.value || 'Main Campus';
 					items[idx].area			= (areaF?.value || '').trim() || 'Campus Grounds';
 					items[idx].dateLost		= (dateF?.value || '').trim() || todayISO();
@@ -1199,7 +1240,7 @@ function initAdminAddPage() {
 				const newItem = {
 					id:					'UF-' + now,
 					name:				nameVal,
-					description:		(descF?.value || '').trim() || 'No description provided.',
+					description:		descVal,
 					campus:				placeF?.value || 'Main Campus',
 					area:				(areaF?.value || '').trim() || 'Campus Grounds',
 					dateLost:			(dateF?.value || '').trim() || todayISO(),
