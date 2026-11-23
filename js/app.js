@@ -246,7 +246,7 @@ function renderCards(items) {
 			mediaEl = document.createElement('img');
 			mediaEl.src = item.images[0];
 			mediaEl.alt = item.name || 'Item photo';
-			mediaEl.style.cssText = 'flex:none;width:132px;min-height:168px;object-fit:cover;border-radius:14px;border:1px solid var(--line);';
+			mediaEl.style.cssText = 'flex:none;width:132px;height:168px;object-fit:cover;border-radius:14px;border:1px solid var(--line);';
 		} else {
 			mediaEl = document.createElement('div');
 			mediaEl.className = 'ph';
@@ -434,7 +434,7 @@ function viewItem(id, itemData) {
 			if (viewBtn) {
 				viewBtn.style.display = '';
 				viewBtn.disabled = false;
-				viewBtn.onclick = () => window.open(images[activeIndex], '_blank');
+				viewBtn.onclick = () => openLightbox(images[activeIndex], item.name);
 			}
 
 			if (images.length > 1) {
@@ -484,6 +484,20 @@ function viewItem(id, itemData) {
 		}
 	};
 	document.addEventListener('keydown', escHandler);
+}
+
+function openLightbox(src, alt) {
+	const box = document.createElement('div');
+	box.className = 'lightbox';
+	box.innerHTML = '<button class="close" type="button" aria-label="Close">✕</button><img alt="">';
+	const img = box.querySelector('img');
+	img.src = src;
+	img.alt = alt || 'Item photo';
+	const close = () => { box.remove(); document.removeEventListener('keydown', onKey, true); };
+	const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); close(); } };
+	box.addEventListener('click', close);
+	document.addEventListener('keydown', onKey, true);
+	document.body.appendChild(box);
 }
 
 function closeOverlay() {

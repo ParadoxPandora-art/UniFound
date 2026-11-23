@@ -423,7 +423,8 @@ a {
 /* photo viewer */
 .gallery {
   position: relative;
-  min-height: 340px;
+  height: 340px;
+  align-self: start;
   overflow: hidden;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
@@ -462,6 +463,33 @@ a {
   font-family: inherit;
   color: var(--navy);
   background: var(--soft);
+  cursor: pointer;
+}
+
+/* full-size photo lightbox (opened by VIEW IMAGE) */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(16 36 61 / .9);
+  cursor: zoom-out;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: calc(100vh - 32px);
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.lightbox .close {
+  top: 16px;
+  right: 16px;
+  color: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
 }
 
@@ -819,7 +847,7 @@ select.field {
 /* 10. Responsive + reduced motion ----------------------------------------- */
 @media (max-width: 760px) {
   .dialog { grid-template-columns: 1fr; padding: 20px; }
-  .gallery { min-height: 260px; }
+  .gallery { height: 260px; }
   .wrap { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .meta,
