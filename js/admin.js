@@ -646,7 +646,7 @@ function renderAdminCards() {
 			: `<span>Date: ${formatDate(item.dateLost)}</span>`;
 
 		const mediaEl = item.images && item.images.length
-			? `<img src="${item.images[0]}" alt="${esc(item.name)}" style="flex:none;width:132px;min-height:168px;object-fit:cover;border-radius:14px;border:1px solid var(--line);">`
+			? `<img src="${item.images[0]}" alt="${esc(item.name)}" style="flex:none;width:132px;height:168px;object-fit:cover;border-radius:14px;border:1px solid var(--line);">`
 			: `<div class="ph"></div>`;
 
 		return `
@@ -701,6 +701,20 @@ function buildPagination() {
 	pager.appendChild(next);
 }
 
+function openLightbox(src, alt) {
+	const box = document.createElement('div');
+	box.className = 'lightbox';
+	box.innerHTML = '<button class="close" type="button" aria-label="Close">✕</button><img alt="">';
+	const img = box.querySelector('img');
+	img.src = src;
+	img.alt = alt || 'Item photo';
+	const close = () => { box.remove(); document.removeEventListener('keydown', onKey, true); };
+	const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); close(); } };
+	box.addEventListener('click', close);
+	document.addEventListener('keydown', onKey, true);
+	document.body.appendChild(box);
+}
+
 function viewItem(id) {
 	const item = getItem(id);
 	if (!overlay) overlay = document.getElementById('details');
@@ -738,7 +752,7 @@ function viewItem(id) {
 				}
 				gallery.querySelector('.view')?.addEventListener('click', (e) => {
 					e.stopPropagation();
-					window.open(item.images[imgIdx], '_blank');
+					openLightbox(item.images[imgIdx], item.name);
 				});
 			};
 			renderGallery();
