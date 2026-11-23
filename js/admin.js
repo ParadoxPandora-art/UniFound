@@ -892,6 +892,43 @@ function showToast(msg) {
 }
 
 let pendingImages = [];
+let photoUploadQueue = Promise.resolve();
+let photoUploadsInProgress = 0;
+let photoInitialImages = [];
+let photoStatusEl = null;
+let photoSaveBtn = null;
+let photoResetBtn = null;
+let photoInputEl = null;
+let photoFormIsSubmitting = false;
+
+function updatePhotoUI() {
+	const thumbsDiv = document.querySelector('.thumbs');
+	if (thumbsDiv) {
+		const countChip = thumbsDiv.querySelector('.photo-count');
+		if (countChip) countChip.innerHTML = `<span>${pendingImages.length}/5</span>`;
+	}
+
+	const isBusy = photoUploadsInProgress > 0 || photoFormIsSubmitting;
+	if (photoSaveBtn) {
+		photoSaveBtn.disabled = isBusy || pendingImages.length === 0;
+		photoSaveBtn.setAttribute('aria-busy', String(isBusy));
+	}
+	if (photoResetBtn) photoResetBtn.disabled = isBusy;
+	if (photoInputEl) photoInputEl.disabled = photoFormIsSubmitting;
+
+	if (photoStatusEl) {
+		photoStatusEl.setAttribute('aria-busy', String(isBusy));
+		if (photoFormIsSubmitting) {
+			photoStatusEl.textContent = 'Saving item…';
+		} else if (photoUploadsInProgress > 0) {
+			photoStatusEl.textContent = `Loading ${photoUploadsInProgress} photo${photoUploadsInProgress === 1 ? '' : 's'}… Please wait before saving.`;
+		} else if (pendingImages.length === 0) {
+			photoStatusEl.textContent = 'Add at least one photo to save this item.';
+		} else {
+			photoStatusEl.textContent = `${pendingImages.length} photo${pendingImages.length === 1 ? '' : 's'} ready. At least one is required.`;
+		}
+	}
+}
 
 function validateItemField(input) {
 	if (!input) return true;
@@ -918,16 +955,29 @@ async function uploadItemImage(files) {
 	if (!files || !files.length) return;
 	const max			 = 5;
 	const allowed	 = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-	const remaining = max - pendingImages.length;
-	const toLoad		= Array.from(files).slice(0, remaining);
+	const selected = Array.from(files);
+	const validFiles = selected.filter(file => allowed.includes(file.type.toLowerCase()));
+	const remaining = Math.max(0, max - pendingImages.length - photoUploadsInProgress);
+	const toLoad = validFiles.slice(0, remaining);
+	photoUploadsInProgress += toLoad.length;
+	updatePhotoUI();
 
-	for (const file of toLoad) {
-		if (!allowed.includes(file.type.toLowerCase())) continue;
-		const dataUrl = await compressImage(file);
-		if (dataUrl && pendingImages.length < max) {
-			pendingImages.push(dataUrl);
-			renderThumbs();
+	const batch = photoUploadQueue.then(async () => {
+		for (const file of toLoad) {
+			let dataUrl = null;
+			try { dataUrl = await compressImage(file); } catch (e) {}
+			if (dataUrl && pendingImages.length < max) {
+				pendingImages.push(dataUrl);
+				renderThumbs();
+			}
 		}
+	});
+	photoUploadQueue = batch.catch(() => {});
+	try {
+		await batch;
+	} finally {
+		photoUploadsInProgress -= toLoad.length;
+		updatePhotoUI();
 	}
 }
 
@@ -992,13 +1042,14 @@ function renderThumbs() {
 	});
 
 	const chip = document.createElement('span');
-	chip.className = 'chips';
+	chip.className = 'chips photo-count';
 	chip.innerHTML = `<span>${pendingImages.length}/5</span>`;
 	thumbsDiv.appendChild(chip);
+	updatePhotoUI();
 }
 
 function resetItemForm(e) {
-	pendingImages = [];
+	pendingImages = [...photoInitialImages];
 	setTimeout(() => {
 		renderThumbs();
 		const dateInput = document.getElementById('date');
@@ -1007,6 +1058,7 @@ function resetItemForm(e) {
 		document.querySelectorAll('.field-msg').forEach(m => m.remove());
 		const errP = document.querySelector('.form-foot .err');
 		if (errP) errP.style.display = 'none';
+		updatePhotoUI();
 	}, 0);
 }
 
@@ -1018,7 +1070,13 @@ function initAdminAddPage() {
 	const dropArea		= document.querySelector('label.drop') || document.getElementById('drop-area');
 	const errP				= document.querySelector('.form-foot .err');
 	const saveBtn		 = document.getElementById('save-btn') || form?.querySelector('button[type="submit"]');
+	const resetBtn = form?.querySelector('button[type="reset"]');
 	const dateInput	 = document.getElementById('date');
+	photoStatusEl = document.getElementById('photo-status');
+	photoSaveBtn = saveBtn;
+	photoResetBtn = resetBtn;
+	photoInputEl = photosInput;
+	photoFormIsSubmitting = false;
 
 	if (dateInput && !dateInput.value) {
 		dateInput.value = todayISO();
@@ -1049,15 +1107,17 @@ function initAdminAddPage() {
 		pendingImages = (editItemObj.images && Array.isArray(editItemObj.images))
 			? [...editItemObj.images]
 			: [];
+		photoInitialImages = [...pendingImages];
 		renderThumbs();
 	} else {
 		pendingImages = [];
+		photoInitialImages = [];
 		renderThumbs();
 	}
 
 	if (photosInput && !photosInput._bound) {
 		photosInput.addEventListener('change', e => {
-			uploadItemImage(e.target.files);
+			void uploadItemImage(e.target.files);
 			e.target.value = '';
 		});
 		photosInput._bound = true;
@@ -1073,7 +1133,7 @@ function initAdminAddPage() {
 		dropArea.addEventListener('drop', e => {
 			e.preventDefault();
 			dropArea.style.background = '';
-			uploadItemImage(e.dataTransfer.files);
+			void uploadItemImage(e.dataTransfer.files);
 		});
 		dropArea._bound = true;
 	}
@@ -1110,8 +1170,18 @@ function initAdminAddPage() {
 		if (errP) errP.style.display = 'none';
 
 		isSubmitting = true;
+		photoFormIsSubmitting = true;
+		updatePhotoUI();
 
 		try {
+			await photoUploadQueue;
+			if (pendingImages.length === 0) {
+				photoFormIsSubmitting = false;
+				isSubmitting = false;
+				updatePhotoUI();
+				return false;
+			}
+
 			const items = getItems();
 
 			if (editId && editItemObj) {
@@ -1122,9 +1192,7 @@ function initAdminAddPage() {
 					items[idx].campus		= placeF?.value || 'Main Campus';
 					items[idx].area			= (areaF?.value || '').trim() || 'Campus Grounds';
 					items[idx].dateLost		= (dateF?.value || '').trim() || todayISO();
-					if (pendingImages && pendingImages.length > 0) {
-						items[idx].images = [...pendingImages];
-					}
+					items[idx].images = [...pendingImages];
 				}
 			} else {
 				const now = Date.now();
@@ -1151,6 +1219,9 @@ function initAdminAddPage() {
 			pendingImages = [];
 		} catch (saveErr) {
 			console.error('Save error:', saveErr);
+			photoFormIsSubmitting = false;
+			isSubmitting = false;
+			updatePhotoUI();
 		}
 
 		window.location.href = 'dashboard.html';

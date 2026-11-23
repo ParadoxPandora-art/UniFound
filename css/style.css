@@ -562,6 +562,11 @@ a {
 .btn.yellow { background: var(--accent); color: #fff; }
 .btn.blue   { background: var(--navy); color: #fff; }
 .btn.blue:hover { background: var(--navy-deep); }
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
 
 /* Claim stays disabled until a file is chosen in #file (pure CSS). */
 .claimbox .yellow[aria-disabled="true"] {
@@ -746,6 +751,30 @@ select.field {
 .thumbs .ph {
   width: 72px;
   min-height: 88px;
+}
+
+.photo-status {
+  min-height: 1.25em;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.photo-status[aria-busy="true"]::before {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  content: "";
+  vertical-align: -0.1em;
+  animation: photo-spin 0.7s linear infinite;
+}
+
+@keyframes photo-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Details grid: name and description span full width, then 3 equal columns */
