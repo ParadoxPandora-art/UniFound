@@ -791,7 +791,7 @@ function viewItem(id) {
 						</div>
 						<div>
 							<label for="ret-contact" style="font-size:.85rem;font-weight:600">Retriever Contact <span style="color:#ef4444">*</span></label>
-							<input id="ret-contact" class="field" type="text" placeholder="Phone (11–16 characters) or email" required style="width:100%;margin-top:4px">
+							<input id="ret-contact" class="field" type="text" placeholder="Phone or email" required style="width:100%;margin-top:4px">
 						</div>
 						<div>
 							<label for="ret-note" style="font-size:.85rem;font-weight:600">Notes <span style="color:#94a3b8;font-weight:400">(optional)</span></label>
