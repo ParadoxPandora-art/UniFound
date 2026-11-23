@@ -103,9 +103,12 @@ a {
 }
 
 .logo small {
-  margin-left: 6px;
+  position: relative;
+  top: 0.45em;          /* drop it onto the same baseline as "UniFound" */
+  margin-left: -6px;    /* cancel part of the .logo gap so it sits right beside it */
   font-size: 0.45em;
   font-weight: 600;
+  white-space: nowrap;
   color: #b9c4e6;
 }
 
@@ -224,11 +227,13 @@ a {
   color: var(--ink);
   background: var(--soft);
   -moz-appearance: textfield;      /* Firefox: hide arrows by default */
+  appearance: textfield;
 }
 
 .year:hover,
 .year:focus {
   -moz-appearance: number-input;   /* Firefox: show arrows */
+  appearance: auto;
 }
 
 .year::-webkit-inner-spin-button {
@@ -865,6 +870,35 @@ select.field {
 
 /* JS overlay toggle — takes over from :target */
 .overlay.open { display: flex; }
+
+/* Delete confirmation modal (admin.js: confirmDeleteModal) */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(16 36 61 / .65);
+  backdrop-filter: blur(4px);
+}
+
+.confirm-dialog {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-modal);
+  animation: pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.confirm-dialog h2 { margin: 0 0 8px; font-size: 1.15rem; color: var(--ink); }
+.confirm-dialog p  { margin: 0 0 20px; color: var(--muted); line-height: 1.5; }
+.confirm-actions   { display: flex; justify-content: flex-end; gap: 10px; }
+.btn.danger        { background: var(--bad); color: #fff; }
+.btn.danger:hover  { background: #991b1b; }
 
 /* Disabled pagination buttons */
 .pager button:disabled {

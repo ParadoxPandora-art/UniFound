@@ -899,14 +899,38 @@ function markRetrieved(id, details) {
 	}
 }
 
-function deleteItem(id) {
-	if (!confirm('Are you sure you want to delete this item record? This cannot be undone.')) return;
-	const items = getItems().filter(i => String(i.id) !== String(id));
-	saveItems(items);
+function confirmDeleteModal(onConfirm) {
+	const box = document.createElement('div');
+	box.className = 'confirm-overlay';
+	box.innerHTML = `
+		<div class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+			<h2 id="confirm-title">Delete this item?</h2>
+			<p id="confirm-text">Are you sure you want to delete this item record? This cannot be undone.</p>
+			<div class="confirm-actions">
+				<button class="btn grey" type="button" data-act="cancel">Cancel</button>
+				<button class="btn danger" type="button" data-act="confirm">Delete</button>
+			</div>
+		</div>`;
+	const close = () => { box.remove(); document.removeEventListener('keydown', onKey, true); };
+	const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); close(); } };
+	box.addEventListener('click', e => {
+		if (e.target === box || e.target.dataset.act === 'cancel') close();
+		else if (e.target.dataset.act === 'confirm') { close(); onConfirm(); }
+	});
+	document.addEventListener('keydown', onKey, true);
+	document.body.appendChild(box);
+	box.querySelector('[data-act="cancel"]').focus();
+}
 
-	if (overlay) overlay.classList.remove('open');
-	loadData();
-	showToast('Item deleted.');
+function deleteItem(id) {
+	confirmDeleteModal(() => {
+		const items = getItems().filter(i => String(i.id) !== String(id));
+		saveItems(items);
+
+		if (overlay) overlay.classList.remove('open');
+		loadData();
+		showToast('Item deleted.');
+	});
 }
 
 function editItem(id) {
