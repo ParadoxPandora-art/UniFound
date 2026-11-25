@@ -1,7 +1,7 @@
 'use strict';
 
 const STORAGE_KEY = 'unifound_items';
-const PER_PAGE = 6;
+const PER_PAGE = 12;
 const MONTH_NAMES = [
 	'January', 'February', 'March', 'April', 'May', 'June',
 	'July', 'August', 'September', 'October', 'November', 'December'

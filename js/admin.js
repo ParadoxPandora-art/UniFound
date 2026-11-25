@@ -4,7 +4,7 @@
 const LS_KEY = 'unifound_items';
 const ADMIN_KEY = 'unifound_admin';
 const SESSION_KEY = 'unifound_session';
-const PER_PAGE = 6;
+const PER_PAGE = 12;
 const MAX_PHOTOS = 5;
 const MONTHS = [
 	'January', 'February', 'March', 'April', 'May', 'June',
